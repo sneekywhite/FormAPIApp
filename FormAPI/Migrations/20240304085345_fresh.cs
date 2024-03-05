@@ -5,31 +5,33 @@
 namespace FormAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class updated : Migration
+    public partial class fresh : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "PhoneNo",
+                name: "FirstName",
                 table: "customers",
-                type: "nvarchar(max)",
+                type: "nvarchar(100)",
+                maxLength: 100,
                 nullable: true,
-                oldClrType: typeof(int),
-                oldType: "int");
+                oldClrType: typeof(string),
+                oldType: "nvarchar(max)",
+                oldNullable: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<int>(
-                name: "PhoneNo",
+            migrationBuilder.AlterColumn<string>(
+                name: "FirstName",
                 table: "customers",
-                type: "int",
-                nullable: false,
-                defaultValue: 0,
+                type: "nvarchar(max)",
+                nullable: true,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
+                oldType: "nvarchar(100)",
+                oldMaxLength: 100,
                 oldNullable: true);
         }
     }

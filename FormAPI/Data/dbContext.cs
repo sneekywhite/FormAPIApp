@@ -16,6 +16,7 @@ namespace FormAPI.Data
         }
 
         public DbSet<Customer> customers { get; set; }
+        public DbSet<refreshToken> refreshtokens { get; set; }
         
     }
 }

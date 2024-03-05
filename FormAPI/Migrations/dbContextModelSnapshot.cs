@@ -37,7 +37,8 @@ namespace FormAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
@@ -63,6 +64,22 @@ namespace FormAPI.Migrations
                     b.HasKey("id");
 
                     b.ToTable("customers");
+                });
+
+            modelBuilder.Entity("FormAPI.Models.refreshToken", b =>
+                {
+                    b.Property<string>("userid")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("tokenid")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("userid");
+
+                    b.ToTable("refreshtokens");
                 });
 #pragma warning restore 612, 618
         }

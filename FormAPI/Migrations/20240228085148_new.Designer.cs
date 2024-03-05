@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FormAPI.Migrations
 {
     [DbContext(typeof(dbContext))]
-    [Migration("20240218215747_updated")]
-    partial class updated
+    [Migration("20240228085148_new")]
+    partial class @new
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,6 +66,22 @@ namespace FormAPI.Migrations
                     b.HasKey("id");
 
                     b.ToTable("customers");
+                });
+
+            modelBuilder.Entity("FormAPI.Models.refreshToken", b =>
+                {
+                    b.Property<string>("userid")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("tokenid")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("userid");
+
+                    b.ToTable("refreshtokens");
                 });
 #pragma warning restore 612, 618
         }

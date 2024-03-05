@@ -1,8 +1,14 @@
-﻿namespace FormAPI.Dto.Request
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FormAPI.Dto.Request
 {
-    public class LoginCustomer
-    {
-        public string username { get; set; }
+    public class LoginCustomer {
+
+        [EmailAddress]
+        [Required]
+        public string email { get; set; }
+        [Required]
+     
         public string password { get; set; }
     }
 }

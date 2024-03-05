@@ -2,11 +2,13 @@
 using FormAPI.Dto.Request;
 using FormAPI.Models;
 using FormAPI.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FormAPI.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class CustomerController : ControllerBase
@@ -42,6 +44,7 @@ namespace FormAPI.Controllers
         }
 
         [HttpGet("Getall")]
+        [Authorize]
         public async Task<IActionResult> Getall()
         {
             var data = await _customerService.GetAll();
@@ -57,6 +60,7 @@ namespace FormAPI.Controllers
         }
 
         [HttpGet("GetSingle")]
+        //[Route("{id:int}")]
         public async Task<IActionResult> GetSingle(int id)
         {
             var data = await _customerService.GetSingle(id);

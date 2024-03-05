@@ -1,8 +1,10 @@
-﻿using FormAPI.Data;
+﻿using AutoMapper;
+using FormAPI.Data;
 using FormAPI.Dto.Request;
 using FormAPI.Dto.Response;
 using FormAPI.Models;
 using FormAPI.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,12 +14,17 @@ namespace FormAPI.Implementation
     public class CustomerService : ICustomerService
     {
         private readonly dbContext _context;
-        public CustomerService(dbContext context)
+        private readonly Response response;
+        private readonly IMapper _mapper;
+        
+        public CustomerService(dbContext context, IMapper mapper)
         {
             _context = context;
-
+            response = new Response();
+            _mapper = mapper;
+           
         }
-        Response response = new Response();
+       // Response response = new Response();
 
         public async Task<Response> Delete(int id)
         {
@@ -64,26 +71,14 @@ namespace FormAPI.Implementation
                     return response;
                 }
 
-                Customer newCustomer = new Customer
-                {
-                    FirstName = register.FirstName,
-                    LastName = register.LastName,
-                    Address = register.Address,
-                    Gender = register.Gender,
-                    PhoneNo = register.PhoneNo,
-                    Email = register.Email,
-                    Password = PasswordHash.HashPassword(register.Password),
-                    Username = register.Username
-
-                };
-
+                Customer newCustomer = _mapper.Map<Customer>(register);
                 await _context.customers.AddAsync(newCustomer);
                 await _context.SaveChangesAsync();
+
                 response.IsSuccess = true;
                 response.Message = "successfully register";
-                response.Result = register.Email;
-
-
+                response.Result = register.FirstName;
+                
 
             }
             catch (Exception ex)
@@ -129,22 +124,24 @@ namespace FormAPI.Implementation
             return response;
         }
 
+       
         public async Task<Response> GetAll()
         {
            //List<Customer> result = new List<Customer>();
             //var data = await _context.customers.ToListAsync();
             try
             {
-                var data = await _context.customers.ToListAsync();
-                List<Customer> result = new List<Customer>(data);
+                IEnumerable<Customer> data = await _context.customers.ToListAsync(); //Select(x=>new Modal() { FirstName=x.FirstName,LastName=x.LastName,Gender=x.Gender,Address=x.Address,PhoneNo=x.PhoneNo,Email=x.Email,Username=x.Username});
                 if (data != null)
                 {
-                    response.Result = result;
+                    response.Result = _mapper.Map<IEnumerable<Modal>>(data);
                     response.Message = "successful";
                     response.IsSuccess = true;
+                    
                 }
                 else
                 {
+                    response.Result = null;
                     response.IsSuccess = false;
                     response.Message = "no data found";
                 }
@@ -165,9 +162,10 @@ namespace FormAPI.Implementation
             {
 
                 var _data = await _context.customers.SingleOrDefaultAsync(data => data.id == id);
+               
                 if (_data != null)
                 {
-                    response.Result = _data;
+                    response.Result = _mapper.Map<Modal>(_data);
                     response.Message = "data found";
                     response.IsSuccess = true;
                 }
