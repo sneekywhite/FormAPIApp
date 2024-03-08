@@ -88,30 +88,32 @@ namespace FormAPI.Implementation
             return response;
         }
 
-        public async Task<Response> Update(RegisterCustomer data, int id)
+        public async Task<Response> Update(UpdateCustomer _data, int id)
         {
             try
             {
                 var _customer = await _context.customers.FindAsync(id);
                 if (_customer != null)
                 {
-                    _customer.FirstName = data.FirstName;
-                    _customer.LastName = data.LastName;
-                    _customer.Address = data.Address;
-                    _customer.Gender = data.Gender;
-                    _customer.Email = data.Email;
+                    _customer.FirstName = _data.FirstName;
+                    _customer.LastName = _data.LastName;
+                    _customer.Address = _data.Address;
+                    _customer.Gender = _data.Gender;
+                    _customer.Email = _data.Email;
+                    _customer.Username = _data.Username;
+                    _customer.Password = PasswordHash.HashPassword(_data.Password);
                     _customer.updatedTime = DateTime.Now;
                     await _context.SaveChangesAsync();
 
                     response.Message = "successfully updated";
-                    response.Result = data.Email;
+                    response.Result = _customer.Email;
                     response.IsSuccess = true;
 
                 }
                 else
                 {
-                    response.Message = "user not found";
-                    response.Result = data.Email;
+                    response.Message = $"user with id {id} not found";
+                    response.Result = null;
                     response.IsSuccess = false;
                 }
 
@@ -130,7 +132,7 @@ namespace FormAPI.Implementation
            //List<Customer> result = new List<Customer>();
             //var data = await _context.customers.ToListAsync();
             try
-            {
+            {   
                 IEnumerable<Customer> data = await _context.customers.ToListAsync(); //Select(x=>new Modal() { FirstName=x.FirstName,LastName=x.LastName,Gender=x.Gender,Address=x.Address,PhoneNo=x.PhoneNo,Email=x.Email,Username=x.Username});
                 if (data != null)
                 {
