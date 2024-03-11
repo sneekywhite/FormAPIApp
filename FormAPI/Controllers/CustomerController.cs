@@ -44,7 +44,7 @@ namespace FormAPI.Controllers
         }
 
         [HttpGet("Getall")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> Getall()
         {
             var data = await _customerService.GetAll();
