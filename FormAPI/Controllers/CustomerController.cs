@@ -36,7 +36,7 @@ namespace FormAPI.Controllers
             return Ok(data);
         }
 
-        [HttpPatch("update")]
+        [HttpPut("update")]
         public async Task<IActionResult> UpdateCust(UpdateCustomer _data, int id)
         {
             var data = await _customerService.Update(_data, id);
